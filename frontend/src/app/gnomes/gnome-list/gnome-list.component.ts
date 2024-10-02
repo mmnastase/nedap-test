@@ -53,7 +53,8 @@ export class GnomeListComponent {
     this.results$ = combineLatest([this.gnomes$, terms$, professionsFilter$]).pipe(
       map(([gnomes, term, professionFilter]) => {
         return gnomes.filter((g: any) => {
-          const profMatch = professionFilter.length === 0 ? true : !!g.professions.find((p: string) => p == professionFilter)
+          const profMatch = professionFilter.length === 0 ? true :
+            this.hasProfessions(professionFilter, g.professions)
           return profMatch && g.name.toLowerCase().includes((term ? term : '').trim().toLowerCase())
         })
       })
@@ -72,5 +73,11 @@ export class GnomeListComponent {
 
   handlePageEvent(event: PageEvent) {
     this.page.next([(event.pageIndex * event.pageSize), (event.pageIndex + 1) * event.pageSize])
+  }
+
+  hasProfessions(filterArray: string[], professionsArray: string[]) {
+    return filterArray.every((el) => {
+      return professionsArray.includes(el)
+    })
   }
 }
