@@ -7,6 +7,5 @@ jobs:
       - run: node --version
       - run: npm --version
       - uses: actions/checkout@v3
-      - run:  cd ./backend && ls
-      - run: npm install
+      - run: cd ./backend && ls && npm install
       - run: node app.js
