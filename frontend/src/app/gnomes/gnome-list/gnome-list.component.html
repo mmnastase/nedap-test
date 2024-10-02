@@ -1,0 +1,35 @@
+<section id="gnomes-list">
+    <section>
+        <mat-form-field>
+            <mat-label for="search">Search for a gnome</mat-label>
+            <input matInput id='search' type="text" [formControl]="searchControl" placeholder="Search...">
+        </mat-form-field>
+        <p>
+            Filter by profession:
+            <mat-button-toggle-group appearance='legacy' id='professions-select' name="profession-filter"
+                aria-label="Professions Filter" [formControl]="professionsControl" multiple>
+                <mat-button-toggle *ngFor='let prof of professions$ | async' [value]='prof'>{{prof}}</mat-button-toggle>
+            </mat-button-toggle-group>
+        </p>
+    </section>
+    <section class="gnome-panels">
+        <mat-accordion *ngFor="let gnome of paginatedResults$ | async">
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title> {{gnome.name}} </mat-panel-title>
+                    <mat-panel-description>
+                        Professions: {{gnome.professions.join(', ')}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-panel-description>
+                    Friends: {{gnome.friends.length > 0 ? gnome.friends.join(', ') : 'No friends :('}}
+                </mat-panel-description>
+            </mat-expansion-panel>
+        </mat-accordion>
+    
+    </section>
+    
+    <mat-paginator (page)='handlePageEvent($event)' [length]="resultsLength$ | async" [pageSize]="20"
+        [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+</section>
